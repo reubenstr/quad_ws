@@ -10,10 +10,11 @@ from src.servo_control import ServoControl
 import copy
 import time
 
+'''
 from src.gym_env import GymEnv
 from src.gui_param_control import GuiParamControl
 from src.env_randomizer import EnvRandomizer
-
+'''
 
 #import sys
 # sys.path.append("/home/devpc/Desktop/quad_ws/src/quad/quad/src/urdf")
@@ -24,6 +25,7 @@ class QuadCommander():
 
     def __init__(self, motion_servo_parameters, frame_parameters, linked_leg_parameters):
 
+        '''    
         if 1:
             # env
             self.env = GymEnv(render=True,
@@ -39,6 +41,9 @@ class QuadCommander():
             # env
         else:
             self.bezier_gait = BezierGait(dt=0.01)
+        '''
+        # SAG
+        self.bezier_gait = BezierGait(dt=0.01)
 
         self.kinematics = Kinematics(frame_parameters, linked_leg_parameters)   
         self.bezier_stepper = BezierStepper()
@@ -90,11 +95,11 @@ class QuadCommander():
 
         joint_angles = self.kinematics.inverse_kinematics(orn, pos, self.T_bf)       
    
-        self.env.pass_joint_angles(joint_angles)
+        #self.env.pass_joint_angles(joint_angles)
         # pass parameters into the model as external observations (for machine learning)
         # env.spot.GetExternalObservations(self.bezier_gait, self.bezier_stepper)
         # step simulation
-        state, reward, done, _ = self.env.step(self.action)
+        #state, reward, done, _ = self.env.step(self.action)
              
         joint_angles_linked_leg = self.kinematics.get_joint_angles_linked_legs(joint_angles)  
         servo_pulse_widths = self.servo_control.convert_joint_angles_to_pulse_widths(joint_angles_linked_leg) 

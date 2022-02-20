@@ -1,5 +1,5 @@
-# from .quad_commander import QuadCommander
-from .quad_simulation import QuadCommander
+from .quad_commander import QuadCommander
+# from .quad_simulation import QuadCommander
 
 from time import sleep
 import rclpy
@@ -20,6 +20,13 @@ from .joystick_interpreter import JoystickInterpreter
 from rclpy.logging import LoggingSeverity
 from rclpy.parameter import Parameter
 
+from adafruit_servokit import ServoKit
+kit = ServoKit(channels=16)
+
+
+# Temp location
+def valmap(value, istart, istop, ostart, ostop):
+  return ostart + (ostop - ostart) * ((value - istart) / (istop - istart))
 
 class JoystickSubscriber(Node):
     def __init__(self):
@@ -63,8 +70,7 @@ class QuadPublisher(Node):
             msg.enable[i] = bool(self.enables[i])
             msg.pulse_width[i] = self.servo_pulse_widths[i]
 
-        self.publisher_.publish(msg)
-
+        self.publisher_.publish(msg)  
 
 def main(args=None):
     rclpy.init(args=args)
@@ -125,6 +131,57 @@ def main(args=None):
         servo_pulse_widths, joint_angles, joint_angles_linked_leg = quad_commander.tick(
             motion_parameters)
         quad_publisher.set_servo_pulse_widths(servo_pulse_widths)
+
+        # servo calibration:
+        # angles set manually by code swapping temporarily until a CLI is developed
+        # set servo to angle 0 degrees, place horn on servo at physical 0 degrees according to kinematics diagram
+        # update calibratedLowAngle to dial in physical0 degrees 
+        # set servo to angle 180 degrees, position likely not at physical 180 degrees
+        # update calibratedHighAngle to dial in physical 180 degrees       
+        # note: the use of adafruit servo driver may be temporary 
+    
+        calibratedLowAngle =  [0, 5, 10,         10, 7, 4,        14, 12, 4,   4, 12, 8]  
+        calibratedHighAngle =  [170, 174, 180,   180, 180, 172,   180, 180, 177,   180, 180, 180]
+        
+        assemblyAngles = [0, 45, 45,   0, 90, 45,   0, 90, 45,   0, 90, 45]
+       
+        offset = [90, 0, 0,     90, 0, 0,    90, 0, 0,    90, 0, 0]
+        direction = [1, 0, 0,   1, 1, 1,   0, 0, 0,     0, 1, 1]  
+
+        for i in range(12):    
+            
+            kit.servo[i].set_pulse_width_range(500, 2500) 
+            kit.servo[i].actuation_range = 180 # not physical range, but controller range  
+                     
+            # live angles
+            angle = joint_angles_linked_leg[i] * 180/3.1415  + offset[i]
+            # scale angle to fit physical calibration
+            angle = valmap(angle, 0, 180, calibratedLowAngle[i], calibratedHighAngle[i])
+
+            # assembly angles
+            # angle = assemblyAngles[i] + offset[i]     
+           
+            # calibration angles
+            # angle = calibratedLowAngle[i]
+            # angle = calibratedHighAngle[i]
+
+            if angle < 0:
+                angle = 0 
+            if angle > 180:
+                angle = 180 
+                    
+            if direction[i] == 1:
+                kit.servo[i].angle = 180 - angle
+            else:
+                kit.servo[i].angle = angle
+         
+        '''    
+        print (joint_angles[5]  * 180/3.1415) 
+        print (joint_angles_linked_leg[5]  * 180/3.1415) 
+        print (kit.servo[5].angle)
+        print ()
+        '''  
+                     
         """  
         temp = temp + 1
         if temp > 5:
