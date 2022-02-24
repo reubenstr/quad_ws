@@ -1,8 +1,11 @@
-# quad_ws
-Quadruped Robot for ROS2 
+# rpi_quad_ws
+Zuko's, a robot dog, ROS2 workspace for RPi4 direct control. 
 
-This is a workspace for upgrading the OpenQuadruped into the ROS2 framework. A goal is simplifying and drying the original source code and removing experiemental code. Work in progress. 
+### Status
 
-See the dev-notes folder for installation steps (not intended as a tutorial as many already exist).
+Development.
 
-See the main project for CAD files, microcontroller source code, and more: https://github.com/reubenstr/Zuko
+### Notes
+See the notes for the used installation process and relevant commands.
+
+See the main project for Zuko's CAD files, PCB's, media, and more, https://github.com/reubenstr/Zuko
