@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 '''
     Standalone servo calibration script.
     Does not require ROS to execute.
@@ -10,7 +11,7 @@ from time import sleep
 import yaml
 import sys
 import os
-from time import sleep
+from time import sleep 
 from src.lib.PCA9685Servos import PCA9685Servos
 
 def warn_user():
