@@ -1,3 +1,7 @@
+'''
+    Class interfacing with the bezier generator and kinematics.
+'''
+
 from src.kinematics import Kinematics
 from src.bezier_gait import BezierGait
 

@@ -89,8 +89,7 @@ class PCA9685Servos:
 
         reg = PCA9685_LED0_REG + (channel * 0x04)
                
-        phase_begin = 0
-        #phase_end = (phase_begin + pulse_width) & PCA9685_PWM_MASK
+        phase_begin = 0     
         phase_end = int(((4016 / 20000) * pulse_width)) & PCA9685_PWM_MASK
 
         bus.write_byte_data(self.address, reg, phase_begin & 0xFF)

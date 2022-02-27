@@ -1,3 +1,7 @@
+'''
+    Generates beizer curves to control feet positions during walking.
+'''
+
 import numpy as np
 from .matrix_transforms import TransToRp
 import copy

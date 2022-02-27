@@ -1,12 +1,16 @@
-# Converts joystick axes and button input into motion parameters to control the robot.
+
+'''
+    Converts joystick axes and button input into motion parameters for robot control.
+
+    Coded to match a Playstation 4 controller schema. 
+    Adjustments may be required for other joysticks/controllers.
+'''
 
 import copy
 import numpy as np
 from src.motion_parameters import MotionParameters, MotionState
 
-
 class JoystickInterpreter():
-
     def __init__(self):
         self.motion_parameters = MotionParameters()
         self.mode_toggle_button_release_flag = True

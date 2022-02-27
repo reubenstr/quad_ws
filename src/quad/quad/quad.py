@@ -1,5 +1,6 @@
-from .quad_commander import QuadCommander
-# from .quad_simulation import QuadCommander
+'''
+    ROS2 Wrapper for quad_main
+'''
 
 from time import sleep
 import rclpy
@@ -9,22 +10,16 @@ import copy
 import yaml
 import io
 from os import path, read
-from sensor_msgs.msg import Joy
-from std_msgs.msg import Float32MultiArray
 
 from rclpy.executors import SingleThreadedExecutor
-from src.motion_parameters import MotionParameters
-# from rclpy.logging import LoggingSeverity
+from sensor_msgs.msg import Joy
 from quad_interfaces.msg import JointAngles
-from .joystick_interpreter import JoystickInterpreter
-
 from rclpy.logging import LoggingSeverity
 from rclpy.parameter import Parameter
 
-
-# Temp location
-def valmap(value, istart, istop, ostart, ostop):
-  return ostart + (ostop - ostart) * ((value - istart) / (istop - istart))
+from src.quad_commander import QuadCommander
+from src.joystick_interpreter import JoystickInterpreter
+from src.motion_parameters import MotionParameters
 
 class JoystickSubscriber(Node):
     def __init__(self):
@@ -44,9 +39,9 @@ class JoystickSubscriber(Node):
         return copy.deepcopy(self.motion_parameters)
 
 
-class QuadPublisher(Node):
+class JointAnglesPublisher(Node):
     def __init__(self):
-        super().__init__('quad_publisher_node')
+        super().__init__('joint_angles_publisher_node')
         self.publisher_ = self.create_publisher(JointAngles, 'joint_angles', 10)
         timer_period_ms = 0.020
         self.timer = self.create_timer(timer_period_ms, self.timer_callback)       
@@ -71,34 +66,26 @@ def main(args=None):
     rclpy.init(args=args)
     rclpy.logging._root_logger.log("QUAD STARTED", LoggingSeverity.INFO)
 
-    quad_publisher = QuadPublisher()
+    joint_angles_publisher_node = JointAnglesPublisher()
     joystick_subscriber = JoystickSubscriber()
 
-    parameters = quad_publisher.declare_parameters(
+    joint_angles_publisher_node.declare_parameters(
         namespace='',
-        parameters=[
-            ('motion_servo_parameters_path', None),
+        parameters=[          
             ('frame_parameters_path', None),
             ('linked_leg_parameters_path', None)])
-
-    motion_servo_parameters_path = quad_publisher.get_parameter(
-        'motion_servo_parameters_path').get_parameter_value().string_value
-    frame_parameters_path = quad_publisher.get_parameter(
+   
+    frame_parameters_path = joint_angles_publisher_node.get_parameter(
         'frame_parameters_path').get_parameter_value().string_value
-    linked_leg_parameters_path = quad_publisher.get_parameter(
+    linked_leg_parameters_path = joint_angles_publisher_node.get_parameter(
         'linked_leg_parameters_path').get_parameter_value().string_value       
-
-    rclpy.logging._root_logger.log(
-        "motion_servo_parameters_path: " + motion_servo_parameters_path, LoggingSeverity.INFO)
+    
     rclpy.logging._root_logger.log(
         "frame_parameters_path: " + frame_parameters_path, LoggingSeverity.INFO)
     rclpy.logging._root_logger.log(
         "linked_leg_parameters_path: " + linked_leg_parameters_path, LoggingSeverity.INFO)
-
-    if path.exists(motion_servo_parameters_path):
-        with open(motion_servo_parameters_path, 'r') as stream:
-            motion_servo_parameters = yaml.safe_load(stream)
-
+  
+    # TODO: catch exception if file not found
     if path.exists(frame_parameters_path):
         with open(frame_parameters_path, 'r') as stream:
             frame_parameters = yaml.safe_load(stream)
@@ -110,16 +97,15 @@ def main(args=None):
     quad_commander = QuadCommander(frame_parameters, linked_leg_parameters)
 
     executor = SingleThreadedExecutor()
-    executor.add_node(quad_publisher)
+    executor.add_node(joint_angles_publisher_node)
     executor.add_node(joystick_subscriber)
-
     
     while rclpy.ok():
         motion_parameters = joystick_subscriber.get_motion_parameters()
         joint_angles, joint_angles_linked_leg = quad_commander.tick(
             motion_parameters)
-        quad_publisher.set_joint_angles(joint_angles)
-        quad_publisher.set_joint_angles_linked_leg(joint_angles_linked_leg)
+        joint_angles_publisher_node.set_joint_angles(joint_angles)
+        joint_angles_publisher_node.set_joint_angles_linked_leg(joint_angles_linked_leg)
 
               
         '''    
@@ -148,7 +134,7 @@ def main(args=None):
         executor.spin_once()
 
     executor.shutdown()
-    quad_publisher.destroy_node()
+    joint_angles_publisher_node.destroy_node()
     joystick_subscriber.destroy_node()
     rclpy.shutdown()
 

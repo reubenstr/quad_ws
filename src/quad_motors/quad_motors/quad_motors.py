@@ -43,10 +43,7 @@ def main(args=None):
     executor = SingleThreadedExecutor()   
     executor.add_node(joint_angles_subscriber)
 
-    #servo_parameters_path = "../config/servo_parameters.yaml" 
-
-
-    parameters = joint_angles_subscriber.declare_parameters(
+    joint_angles_subscriber.declare_parameters(
         namespace='',
         parameters=[('servo_parameters_path', None)])
 
@@ -59,9 +56,8 @@ def main(args=None):
     try:       
         with open(servo_parameters_path, 'r') as stream:
             servo_parameters = yaml.safe_load(stream)
-    except:       
-        print("Failed to load parameters from file. Please run servo_calibration.py")       
-        input("Press any key to exit...")
+    except: 
+        rclpy.logging._root_logger.log("Failed to load parameters from file. Please run servo_calibration.py", LoggingSeverity.FATAL)
         sys.exit(1)
 
     servo_controller = ServoController(1, 0x40, servo_parameters) 

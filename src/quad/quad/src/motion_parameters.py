@@ -1,6 +1,6 @@
 """ 
-Data class containing motion parameters to control 
-the quadruped's movement and states.
+    Data class containing motion parameters to control 
+    the quadruped's movement and states.
 """
 
 import numpy as np

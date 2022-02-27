@@ -23,6 +23,7 @@ def warn_user():
     read_line = sys.stdin.readline().split()[0]
     if read_line not in ["Y", "y", "yes", "Yes", "YES"]:
         sys.exit(-1)
+    os.system('clear')
 
 def clamp(num, min_val, max_val):
     return (max(min(num, max_val), min_val))
@@ -50,9 +51,7 @@ def print_screen(motion_servo_parameters_path, selected_servo, joint_pulse_width
         10: "back right upper leg",
         11: "back right lower leg"}
 
-    os.system('clear')
-    print("Motion Servo Calibration")
-    print("Path: " + motion_servo_parameters_path)
+    os.system('clear')   
     print("SERVO [LIVE PULSE WIDTH] : ZERO PULSE WIDTH, PULSE WIDTH PER DEGREE, MIN P.W., MAX P.W., JOINT")
     for i in range(12):
         text_format = green if selected_servo == i else white
@@ -98,8 +97,6 @@ def main(args=None):
         with open(motion_servo_parameters_path, 'r') as stream:
             parameters = yaml.safe_load(stream)
     except:
-        print()
-        print(motion_servo_parameters_path)
         print("Failed to load parameters from file.")
         print("Default parameters will be generated at path:")
         print(motion_servo_parameters_path)

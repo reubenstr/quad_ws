@@ -1,7 +1,10 @@
 
+'''
+    Contains kinematic model to generate joint angles from orientation, position, feet location.
+'''
+
 import numpy as np
 from .matrix_transforms import RpToTrans, TransToRp, TransInv, RPY, TransformVector
-#from matrix_transforms import RpToTrans, TransToRp, TransInv, RPY, TransformVector
 from collections import OrderedDict
 
 
