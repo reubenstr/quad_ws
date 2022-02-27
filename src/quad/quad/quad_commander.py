@@ -2,7 +2,6 @@ from src.kinematics import Kinematics
 from src.bezier_gait import BezierGait
 
 class QuadCommander():
-
     def __init__(self, frame_parameters, linked_leg_parameters):            
         self.bezier_gait = BezierGait(dt=0.01)
         self.kinematics = Kinematics(frame_parameters, linked_leg_parameters)  

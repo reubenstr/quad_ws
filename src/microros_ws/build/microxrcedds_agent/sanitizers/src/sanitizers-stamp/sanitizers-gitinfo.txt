@@ -1,3 +1,0 @@
-repository='https://github.com/arsenm/sanitizers-cmake'
-module=''
-tag='origin'

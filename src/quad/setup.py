@@ -14,13 +14,13 @@ setup(
         
         (os.path.join('share', package_name), glob('launch/*.launch.py')),
         (os.path.join('share', package_name, 'config'), glob('config/*.yaml')),      
-        (os.path.join('share', package_name, 'urdf'), glob('quad/src/urdf/*.urdf')),
-        (os.path.join('share', package_name, 'stl'), glob('quad/src/stl/*.stl')),
+        (os.path.join('share', package_name, 'urdf'), glob(package_name + '/src/urdf/*.urdf')),
+        (os.path.join('share', package_name, 'stl'), glob(package_name + '/src/stl/*.stl')),
         
-        (os.path.join('lib', package_name, 'src'), glob('quad/src/*.py')), 
-        (os.path.join('lib', package_name, 'stl'), glob('quad/src/stl/*.stl')),
-        (os.path.join('lib', package_name, 'urdf'), glob('quad/src/urdf/*.urdf')),
-        (os.path.join('lib', package_name, 'urdf'), glob('quad/src/urdf/*.*')),
+        (os.path.join('lib', package_name, 'src'), glob(package_name + '/src/*.py')), 
+        (os.path.join('lib', package_name, 'stl'), glob(package_name + '/src/stl/*.stl')),
+        (os.path.join('lib', package_name, 'urdf'), glob(package_name + '/src/urdf/*.urdf')),
+        (os.path.join('lib', package_name, 'urdf'), glob(package_name + '/src/urdf/*.*')),
     
     ],
     install_requires=['setuptools'],

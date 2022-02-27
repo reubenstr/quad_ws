@@ -17,7 +17,6 @@ from src.gym_env import GymEnv
 from src.gui_param_control import GuiParamControl
 from src.env_randomizer import EnvRandomizer
 
-
 class Commander():
     def __init__(self):
         self.env = GymEnv(render=True,
@@ -26,7 +25,7 @@ class Commander():
                                 draw_foot_path=False,
                                 env_randomizer=None)
         self.env.reset()
-        # self.gui_param_controller = GuiParamControl(self.env.spot.quadruped)
+        self.gui_param_controller = GuiParamControl(self.env.spot.quadruped)
         self.action = self.env.action_space.sample()       
 
     def set_joint_angles(self, joint_angles):
@@ -65,7 +64,7 @@ def main(args=None):
 
     commander = Commander()
 
-    while rclpy.ok():          
+    while rclpy.ok():                  
         if joint_angles_subscriber.is_joint_angle_received():
             commander.set_joint_angles(joint_angles_subscriber.get_joint_angles())        
             commander.tick()

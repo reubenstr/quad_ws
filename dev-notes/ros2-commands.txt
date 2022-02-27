@@ -33,6 +33,7 @@ BUILD:
 	BUILD AND RUN:
 		colcon build --packages-select quad; ros2 run quad quad
 		colcon build --packages-select quad_simulation; ros2 run quad_simulation quad_simulation
+		colcon build --packages-select quad_motors; ros2 run quad_motors quad_motors
 	
 SOURCE:
 	SOURCE ROS:
@@ -52,7 +53,8 @@ LAUNCH:
 		ros2 launch quad quad.launch.py
 	
 	BUILD THEN LAUNCH:
-		sudo colcon build --packages-select quad; ros2 launch quad quad.launch.py		
+		sudo colcon build --packages-select quad; ros2 launch quad quad.launch.py	
+		sudo colcon build --packages-select quad_motors; ros2 launch quad_motors quad_motors.launch.py	
 
 RQT CONSOLE:
 	ros2 run rqt_console rqt_console
