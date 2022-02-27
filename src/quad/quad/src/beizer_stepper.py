@@ -1,4 +1,7 @@
-""" Open Loop Controller for Spot Micro. Takes GUI params or uses default
+""" 
+    Open Loop Controller for Quad.
+    Takes GUI params or uses default.
+    Used for machine learning to auto move quad forward.
 """
 import numpy as np
 from random import shuffle

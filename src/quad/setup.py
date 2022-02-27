@@ -32,8 +32,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'quad = quad.quad:main',
-            'motion_servo_calibration = quad.motion_servo_calibration:main'
+            'quad = quad.quad:main'            
         ],
     },
 )

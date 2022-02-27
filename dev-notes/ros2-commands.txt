@@ -23,6 +23,7 @@ CREATE PACKAGE:
 
 BUILD:
 	(from the workspace directory)
+	(some packages will fail without required parameters)
 	BUILD ALL:
 		colcon build
 	
@@ -31,6 +32,7 @@ BUILD:
 	
 	BUILD AND RUN:
 		colcon build --packages-select quad; ros2 run quad quad
+		colcon build --packages-select quad_simulation; ros2 run quad_simulation quad_simulation
 	
 SOURCE:
 	SOURCE ROS:
