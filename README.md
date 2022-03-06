@@ -1,10 +1,5 @@
 # rpi_quad_ws
-RPi 4 ROS2 workspace Zuko, a robot dog! 
+RPi 4 ROS2 workspace Zuko
 
-### Status
-
-Development.
-
-### Notes
-
-See the main project for Zuko's CAD files, PCB's, media, and more, https://github.com/reubenstr/Zuko
+# Relocated
+The quad_ws workspace has been moved to Zuko's main repository: https://github.com/reubenstr/zuko
