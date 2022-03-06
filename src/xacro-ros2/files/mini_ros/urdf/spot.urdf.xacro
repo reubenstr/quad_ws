@@ -2,7 +2,7 @@
 <robot name="spot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Include Macros -->
-  <xacro:include filename="$(find mini_ros)/urdf/spot_macro.xacro" />
+  <xacro:include filename="$(find mini_ros)/urdf/macros.xacro" />
   <xacro:include filename="$(find mini_ros)/urdf/transmissions.xacro" />
   <!-- <xacro:include filename="$(find mini_ros)/urdf/accessories.urdf.xacro" /> -->
 
